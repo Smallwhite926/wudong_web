@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>乌东村苗族风格 UI Playground</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background: #f5f5f5;
+            padding: 2rem;
+        }
+
+        .playground-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #333;
+        }
+
+        .playground-title h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .playground-title p {
+            color: #666;
+        }
+
+        .section {
+            max-width: 1200px;
+            margin: 0 auto 3rem;
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 2px solid #eee;
+            color: #333;
+        }
+
+        .color-palettes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .palette-card {
+            border: 2px solid #eee;
+            border-radius: 10px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .palette-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+
+        .palette-card.selected {
+            border-color: #333;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .palette-name {
+            font-weight: bold;
+            margin-bottom: 0.8rem;
+            color: #333;
+        }
+
+        .palette-colors {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .color-swatch {
+            flex: 1;
+            height: 50px;
+            border-radius: 6px;
+            position: relative;
+        }
+
+        .color-swatch::after {
+            content: attr(data-color);
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7rem;
+            color: #666;
+            white-space: nowrap;
+        }
+
+        .palette-desc {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 1.5rem;
+        }
+
+        .button-styles {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            padding: 1rem;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            min-width: 200px;
+        }
+
+        .button-group-title {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.3rem;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .btn-style1 {
+            background: linear-gradient(135deg, #8B0000 0%, #DC143C 100%);
+            color: #FFD700;
+            border: 2px solid #FFD700;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .btn-style1:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(139, 0, 0, 0.4);
+        }
+
+        .btn-style2 {
+            background: #1a365d;
+            color: #fff;
+            border: 2px solid #c9a962;
+            position: relative;
+        }
+
+        .btn-style2::before,
+        .btn-style2::after {
+            content: '◆';
+            position: absolute;
+            font-size: 0.6rem;
+            color: #c9a962;
+        }
+
+        .btn-style2::before {
+            left: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .btn-style2::after {
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .btn-style2:hover {
+            background: #2c5282;
+            box-shadow: 0 4px 15px rgba(26, 54, 93, 0.4);
+        }
+
+        .btn-style3 {
+            background: #fff;
+            color: #8B0000;
+            border: 2px solid #8B0000;
+            position: relative;
+        }
+
+        .btn-style3::before {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            right: 4px;
+            bottom: 4px;
+            border: 1px solid #8B0000;
+            pointer-events: none;
+        }
+
+        .btn-style3:hover {
+            background: #8B0000;
+            color: #fff;
+        }
+
+        .btn-style3:hover::before {
+            border-color: #fff;
+        }
+
+        .btn-style4 {
+            background: linear-gradient(180deg, #4a7c59 0%, #2d5016 100%);
+            color: #f0e68c;
+            border-radius: 20px;
+            border: none;
+        }
+
+        .btn-style4:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(45, 80, 22, 0.4);
+        }
+
+        .btn-style5 {
+            background: #2c2c2c;
+            color: #e74c3c;
+            border: 3px double #e74c3c;
+        }
+
+        .btn-style5:hover {
+            background: #e74c3c;
+            color: #2c2c2c;
+        }
+
+        .card-styles {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            border-radius: 10px;
+            overflow: hidden;
+            background: white;
+        }
+
+        .card-style1 {
+            border: 3px solid #8B0000;
+            position: relative;
+        }
+
+        .card-style1::before,
+        .card-style1::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #FFD700;
+        }
+
+        .card-style1::before {
+            top: -3px;
+            left: -3px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .card-style1::after {
+            bottom: -3px;
+            right: -3px;
+            border-left: none;
+            border-top: none;
+        }
+
+        .card-style1 .card-header {
+            background: linear-gradient(135deg, #8B0000 0%, #DC143C 100%);
+            color: #FFD700;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .card-style2 {
+            border: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .card-style2 .card-pattern {
+            height: 60px;
+            background: repeating-linear-gradient(
+                45deg,
+                #1a365d,
+                #1a365d 10px,
+                #c9a962 10px,
+                #c9a962 12px
+            );
+        }
+
+        .card-style2 .card-content {
+            padding: 1.5rem;
+        }
+
+        .card-style3 {
+            background: #fdf6e3;
+            border: 2px solid #d4a574;
+            position: relative;
+        }
+
+        .card-style3 .card-decoration {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            border: 2px solid #8B4513;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .card-style3 .card-content {
+            padding: 1.5rem;
+            padding-top: 3rem;
+        }
+
+        .card-style4 {
+            background: #1a1a2e;
+            color: #e94560;
+            border: 2px solid #e94560;
+        }
+
+        .card-style4 .card-header {
+            background: #16213e;
+            padding: 1rem;
+            border-bottom: 2px solid #e94560;
+        }
+
+        .card-style4 .card-content {
+            padding: 1.5rem;
+        }
+
+        .card-content h4 {
+            margin-bottom: 0.5rem;
+        }
+
+        .card-content p {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .card-style4 .card-content p {
+            color: #a0a0a0;
+        }
+
+        .nav-styles {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+        }
+
+        .nav-logo {
+            font-weight: bold;
+            margin-right: 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-style1 {
+            background: linear-gradient(180deg, #8B0000 0%, #600000 100%);
+            border-bottom: 4px solid #FFD700;
+        }
+
+        .nav-style1 .nav-logo {
+            color: #FFD700;
+            font-size: 1.3rem;
+        }
+
+        .nav-style1 .nav-links a {
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+
+        .nav-style1 .nav-links a:hover,
+        .nav-style1 .nav-links a.active {
+            background: rgba(255, 215, 0, 0.3);
+            color: #FFD700;
+        }
+
+        .nav-style2 {
+            background: #1a365d;
+            position: relative;
+        }
+
+        .nav-style2::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: repeating-linear-gradient(
+                90deg,
+                #c9a962,
+                #c9a962 20px,
+                #1a365d 20px,
+                #1a365d 25px
+            );
+        }
+
+        .nav-style2 .nav-logo {
+            color: #c9a962;
+        }
+
+        .nav-style2 .nav-links a {
+            color: #e2e8f0;
+            position: relative;
+        }
+
+        .nav-style2 .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 3px;
+            background: #c9a962;
+            transition: width 0.3s ease;
+        }
+
+        .nav-style2 .nav-links a:hover::after,
+        .nav-style2 .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-style3 {
+            background: #f5deb3;
+            border: 2px solid #8B4513;
+        }
+
+        .nav-style3 .nav-logo {
+            color: #8B4513;
+        }
+
+        .nav-style3 .nav-links a {
+            color: #654321;
+            padding: 0.3rem 0.8rem;
+            border: 2px solid transparent;
+        }
+
+        .nav-style3 .nav-links a:hover,
+        .nav-style3 .nav-links a.active {
+            border-color: #8B4513;
+            border-radius: 20px;
+            background: rgba(139, 69, 19, 0.1);
+        }
+
+        .pattern-samples {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .pattern-sample {
+            height: 120px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+            font-size: 0.9rem;
+        }
+
+        .pattern-1 {
+            background: repeating-linear-gradient(
+                45deg,
+                #8B0000,
+                #8B0000 10px,
+                #FFD700 10px,
+                #FFD700 12px
+            );
+        }
+
+        .pattern-2 {
+            background: 
+                radial-gradient(circle at 20% 50%, #1a365d 3px, transparent 3px),
+                radial-gradient(circle at 80% 50%, #c9a962 3px, transparent 3px),
+                #1a365d;
+            background-size: 30px 30px;
+        }
+
+        .pattern-3 {
+            background: 
+                linear-gradient(30deg, #2d5016 12%, transparent 12.5%, transparent 87%, #2d5016 87.5%, #2d5016),
+                linear-gradient(150deg, #2d5016 12%, transparent 12.5%, transparent 87%, #2d5016 87.5%, #2d5016),
+                linear-gradient(30deg, #2d5016 12%, transparent 12.5%, transparent 87%, #2d5016 87.5%, #2d5016),
+                linear-gradient(150deg, #2d5016 12%, transparent 12.5%, transparent 87%, #2d5016 87.5%, #2d5016),
+                linear-gradient(60deg, #4a7c5977 25%, transparent 25.5%, transparent 75%, #4a7c5977 75%, #4a7c5977),
+                linear-gradient(60deg, #4a7c5977 25%, transparent 25.5%, transparent 75%, #4a7c5977 75%, #4a7c5977);
+            background-size: 40px 70px;
+            background-position: 0 0, 0 0, 20px 35px, 20px 35px, 0 0, 20px 35px;
+        }
+
+        .pattern-4 {
+            background: 
+                conic-gradient(from 45deg, #e74c3c 25%, #2c2c2c 25% 50%, #e74c3c 50% 75%, #2c2c2c 75%);
+            background-size: 30px 30px;
+        }
+
+        .pattern-5 {
+            background: 
+                radial-gradient(circle at 50% 50%, transparent 8px, #8B4513 8px, #8B4513 10px, transparent 10px),
+                #fdf6e3;
+            background-size: 40px 40px;
+        }
+
+        .pattern-6 {
+            background: 
+                linear-gradient(90deg, #8B0000 50%, #fff 50%);
+            background-size: 20px 20px;
+        }
+
+        .preview-section {
+            margin-top: 3rem;
+            padding: 1.5rem;
+            background: #f0f0f0;
+            border-radius: 10px;
+        }
+
+        .preview-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .live-preview {
+            min-height: 300px;
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .typography-samples {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .type-sample {
+            padding: 1rem;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+
+        .type-label {
+            font-size: 0.8rem;
+            color: #999;
+            margin-bottom: 0.5rem;
+        }
+
+        .type-chinese {
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+
+        .type-kaiti {
+            font-family: 'KaiTi', 'STKaiti', serif;
+        }
+
+        .type-songti {
+            font-family: 'SimSun', 'STSong', serif;
+        }
+
+        .type-heiti {
+            font-family: 'SimHei', 'STHeiti', sans-serif;
+        }
+
+        .result-section {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            max-width: 300px;
+            z-index: 100;
+        }
+
+        .result-title {
+            font-weight: bold;
+            margin-bottom: 0.8rem;
+            color: #333;
+        }
+
+        .result-item {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.3rem;
+        }
+
+        .confirm-btn {
+            width: 100%;
+            margin-top: 1rem;
+            padding: 0.8rem;
+            background: #333;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .confirm-btn:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="playground-title">
+        <h1>🎨 乌东村苗族风格 UI Playground</h1>
+        <p>选择您喜欢的样式组合，确认后开始正式构建</p>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">1. 配色方案</h2>
+        <div class="color-palettes">
+            <div class="palette-card" data-palette="miao-red">
+                <div class="palette-name">方案一：红金苗族风</div>
+                <div class="palette-colors">
+                    <div class="color-swatch" style="background: #8B0000;" data-color="#8B0000"></div>
+                    <div class="color-swatch" style="background: #DC143C;" data-color="#DC143C"></div>
+                    <div class="color-swatch" style="background: #FFD700;" data-color="#FFD700"></div>
+                    <div class="color-swatch" style="background: #FFF8DC;" data-color="#FFF8DC"></div>
+                </div>
+                <div class="palette-desc">以苗族传统红金配色为主，象征热情与尊贵，适合喜庆场合</div>
+            </div>
+            <div class="palette-card" data-palette="miao-blue">
+                <div class="palette-name">方案二：蓝金蜡染风</div>
+                <div class="palette-colors">
+                    <div class="color-swatch" style="background: #1a365d;" data-color="#1a365d"></div>
+                    <div class="color-swatch" style="background: #2c5282;" data-color="#2c5282"></div>
+                    <div class="color-swatch" style="background: #c9a962;" data-color="#c9a962"></div>
+                    <div class="color-swatch" style="background: #f7fafc;" data-color="#f7fafc"></div>
+                </div>
+                <div class="palette-desc">灵感来源于苗族蜡染工艺，蓝色为主调，典雅古朴</div>
+            </div>
+            <div class="palette-card" data-palette="miao-earth">
+                <div class="palette-name">方案三：大地苗寨风</div>
+                <div class="palette-colors">
+                    <div class="color-swatch" style="background: #8B4513;" data-color="#8B4513"></div>
+                    <div class="color-swatch" style="background: #d4a574;" data-color="#d4a574"></div>
+                    <div class="color-swatch" style="background: #fdf6e3;" data-color="#fdf6e3"></div>
+                    <div class="color-swatch" style="background: #654321;" data-color="#654321"></div>
+                </div>
+                <div class="palette-desc">以吊脚楼木质色调为灵感，温暖质朴，贴近自然</div>
+            </div>
+            <div class="palette-card" data-palette="miao-forest">
+                <div class="palette-name">方案四：山林绿意风</div>
+                <div class="palette-colors">
+                    <div class="color-swatch" style="background: #2d5016;" data-color="#2d5016"></div>
+                    <div class="color-swatch" style="background: #4a7c59;" data-color="#4a7c59"></div>
+                    <div class="color-swatch" style="background: #f0e68c;" data-color="#f0e68c"></div>
+                    <div class="color-swatch" style="background: #f5f5dc;" data-color="#f5f5dc"></div>
+                </div>
+                <div class="palette-desc">以苗寨周围山林为灵感，清新自然，充满生机</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">2. 按钮样式</h2>
+        <div class="button-styles">
+            <div class="button-group">
+                <div class="button-group-title">样式一：红金镶边</div>
+                <button class="btn btn-style1">立即预订</button>
+                <button class="btn btn-style1">查看详情</button>
+            </div>
+            <div class="button-group">
+                <div class="button-group-title">样式二：蓝金菱形</div>
+                <button class="btn btn-style2">立即预订</button>
+                <button class="btn btn-style2">查看详情</button>
+            </div>
+            <div class="button-group">
+                <div class="button-group-title">样式三：双线边框</div>
+                <button class="btn btn-style3">立即预订</button>
+                <button class="btn btn-style3">查看详情</button>
+            </div>
+            <div class="button-group">
+                <div class="button-group-title">样式四：圆润自然</div>
+                <button class="btn btn-style4">立即预订</button>
+                <button class="btn btn-style4">查看详情</button>
+            </div>
+            <div class="button-group">
+                <div class="button-group-title">样式五：黑红双线</div>
+                <button class="btn btn-style5">立即预订</button>
+                <button class="btn btn-style5">查看详情</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">3. 卡片样式</h2>
+        <div class="card-styles">
+            <div class="card card-style1">
+                <div class="card-header">
+                    <h4>红金角饰卡片</h4>
+                </div>
+                <div class="card-content">
+                    <p>以苗族传统红金配色为主，四角装饰金色角花，体现尊贵典雅的民族特色。</p>
+                </div>
+            </div>
+            <div class="card card-style2">
+                <div class="card-pattern"></div>
+                <div class="card-content">
+                    <h4>蜡染纹卡片</h4>
+                    <p>顶部采用蜡染斜纹图案装饰，灵感来源于苗族蜡染工艺，古朴典雅。</p>
+                </div>
+            </div>
+            <div class="card card-style3">
+                <div class="card-decoration">🌸</div>
+                <div class="card-content">
+                    <h4>苗绣花朵卡片</h4>
+                    <p>米色底调搭配木质边框，右上角装饰苗绣风格花朵，温馨自然。</p>
+                </div>
+            </div>
+            <div class="card card-style4">
+                <div class="card-header">
+                    <h4>黑红银饰卡片</h4>
+                </div>
+                <div class="card-content">
+                    <p>以黑红为主色调，灵感来源于苗族银饰与刺绣的对比，神秘而高贵。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">4. 导航栏样式</h2>
+        <div class="nav-styles">
+            <div class="nav nav-style1">
+                <div class="nav-logo">乌东文旅</div>
+                <ul class="nav-links">
+                    <li><a href="#" class="active">首页</a></li>
+                    <li><a href="#">美食</a></li>
+                    <li><a href="#">景点</a></li>
+                    <li><a href="#">住宿</a></li>
+                </ul>
+            </div>
+            <div class="nav nav-style2">
+                <div class="nav-logo">乌东文旅</div>
+                <ul class="nav-links">
+                    <li><a href="#" class="active">首页</a></li>
+                    <li><a href="#">美食</a></li>
+                    <li><a href="#">景点</a></li>
+                    <li><a href="#">住宿</a></li>
+                </ul>
+            </div>
+            <div class="nav nav-style3">
+                <div class="nav-logo">乌东文旅</div>
+                <ul class="nav-links">
+                    <li><a href="#" class="active">首页</a></li>
+                    <li><a href="#">美食</a></li>
+                    <li><a href="#">景点</a></li>
+                    <li><a href="#">住宿</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">5. 装饰图案</h2>
+        <div class="pattern-samples">
+            <div class="pattern-sample pattern-1">斜纹蜡染</div>
+            <div class="pattern-sample pattern-2">点状花纹</div>
+            <div class="pattern-sample pattern-3">几何菱形</div>
+            <div class="pattern-sample pattern-4">棋盘格纹</div>
+            <div class="pattern-sample pattern-5">圆环图案</div>
+            <div class="pattern-sample pattern-6">条纹图案</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">6. 字体样式</h2>
+        <div class="typography-samples">
+            <div class="type-sample type-chinese">
+                <div class="type-label">微软雅黑（推荐）</div>
+                <div style="font-size: 1.5rem; font-weight: bold;">乌东文旅 · 美食之旅</div>
+            </div>
+            <div class="type-sample type-kaiti">
+                <div class="type-label">楷体（古典风）</div>
+                <div style="font-size: 1.5rem; font-weight: bold;">乌东文旅 · 美食之旅</div>
+            </div>
+            <div class="type-sample type-songti">
+                <div class="type-label">宋体（传统风）</div>
+                <div style="font-size: 1.5rem; font-weight: bold;">乌东文旅 · 美食之旅</div>
+            </div>
+            <div class="type-sample type-heiti">
+                <div class="type-label">黑体（现代风）</div>
+                <div style="font-size: 1.5rem; font-weight: bold;">乌东文旅 · 美食之旅</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="result-section">
+        <div class="result-title">📋 您的选择</div>
+        <div class="result-item" id="sel-palette">配色方案：未选择</div>
+        <div class="result-item" id="sel-button">按钮样式：未选择</div>
+        <div class="result-item" id="sel-card">卡片样式：未选择</div>
+        <div class="result-item" id="sel-nav">导航样式：未选择</div>
+        <button class="confirm-btn" onclick="confirmSelection()">确认选择</button>
+    </div>
+
+    <script>
+        const selections = {
+            palette: null,
+            button: null,
+            card: null,
+            nav: null
+        };
+
+        document.querySelectorAll('.palette-card').forEach(card => {
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.palette-card').forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+                selections.palette = card.dataset.palette;
+                updateSelectionDisplay();
+            });
+        });
+
+        function updateSelectionDisplay() {
+            const paletteNames = {
+                'miao-red': '红金苗族风',
+                'miao-blue': '蓝金蜡染风',
+                'miao-earth': '大地苗寨风',
+                'miao-forest': '山林绿意风'
+            };
+            document.getElementById('sel-palette').textContent = '配色方案：' + (selections.palette ? paletteNames[selections.palette] : '未选择');
+            document.getElementById('sel-button').textContent = '按钮样式：' + (selections.button ? selections.button : '未选择');
+            document.getElementById('sel-card').textContent = '卡片样式：' + (selections.card ? selections.card : '未选择');
+            document.getElementById('sel-nav').textContent = '导航样式：' + (selections.nav ? selections.nav : '未选择');
+        }
+
+        document.querySelectorAll('.btn-style1').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                selections.button = '样式一：红金镶边';
+                updateSelectionDisplay();
+                alert('已选择：红金镶边按钮样式');
+            });
+        });
+
+        document.querySelectorAll('.btn-style2').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                selections.button = '样式二：蓝金菱形';
+                updateSelectionDisplay();
+                alert('已选择：蓝金菱形按钮样式');
+            });
+        });
+
+        document.querySelectorAll('.btn-style3').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                selections.button = '样式三：双线边框';
+                updateSelectionDisplay();
+                alert('已选择：双线边框按钮样式');
+            });
+        });
+
+        document.querySelectorAll('.btn-style4').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                selections.button = '样式四：圆润自然';
+                updateSelectionDisplay();
+                alert('已选择：圆润自然按钮样式');
+            });
+        });
+
+        document.querySelectorAll('.btn-style5').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                selections.button = '样式五：黑红双线';
+                updateSelectionDisplay();
+                alert('已选择：黑红双线按钮样式');
+            });
+        });
+
+        const cardStyleNames = ['红金角饰卡片', '蜡染纹卡片', '苗绣花朵卡片', '黑红银饰卡片'];
+        document.querySelectorAll('.card').forEach((card, index) => {
+            card.style.cursor = 'pointer';
+            card.addEventListener('click', () => {
+                selections.card = cardStyleNames[index];
+                updateSelectionDisplay();
+                card.style.transform = 'scale(0.98)';
+                setTimeout(() => card.style.transform = '', 200);
+            });
+        });
+
+        const navStyleNames = ['样式一：红金镶边', '样式二：蓝金蜡染', '样式三：木质圆润'];
+        document.querySelectorAll('.nav').forEach((nav, index) => {
+            nav.style.cursor = 'pointer';
+            nav.addEventListener('click', (e) => {
+                e.preventDefault();
+                selections.nav = navStyleNames[index];
+                updateSelectionDisplay();
+                nav.style.transform = 'scale(0.99)';
+                setTimeout(() => nav.style.transform = '', 200);
+            });
+        });
+
+        function confirmSelection() {
+            if (!selections.palette || !selections.button || !selections.card || !selections.nav) {
+                alert('请先选择所有样式！');
+                return;
+            }
+            const result = `
+                您的选择：
+                配色方案：${selections.palette}
+                按钮样式：${selections.button}
+                卡片样式：${selections.card}
+                导航样式：${selections.nav}
+            `;
+            alert(result + '\n\n选择已确认，即将开始正式构建！');
+        }
+    </script>
+</body>
+</html>

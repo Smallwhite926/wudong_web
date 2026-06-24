@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>乌东村苗族风格 - 样式预览</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --font-family: 'KaiTi', 'STKaiti', serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: #f5f5f5;
+            padding: 2rem;
+        }
+
+        .preview-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .preview-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .preview-header h1 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .preview-header p {
+            color: #666;
+        }
+
+        .scheme-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .scheme-tab {
+            padding: 0.8rem 2rem;
+            border: 2px solid #ddd;
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            font-family: var(--font-family);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .scheme-tab.active {
+            background: #1a365d;
+            color: white;
+            border-color: #1a365d;
+        }
+
+        .scheme-tab:hover {
+            transform: translateY(-2px);
+        }
+
+        .preview-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        .theme-section {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .theme-nav {
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .nav-miao-blue {
+            background: #1a365d;
+        }
+
+        .nav-miao-forest {
+            background: #2d5016;
+        }
+
+        .theme-nav::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .nav-miao-blue::before {
+            background: repeating-linear-gradient(
+                90deg,
+                #c9a962,
+                #c9a962 20px,
+                #1a365d 20px,
+                #1a365d 25px
+            );
+        }
+
+        .nav-miao-forest::before {
+            background: repeating-linear-gradient(
+                90deg,
+                #f0e68c,
+                #f0e68c 20px,
+                #2d5016 20px,
+                #2d5016 25px
+            );
+        }
+
+        .nav-logo {
+            font-weight: bold;
+            font-size: 1.3rem;
+            margin-right: 2rem;
+        }
+
+        .nav-miao-blue .nav-logo {
+            color: #c9a962;
+        }
+
+        .nav-miao-forest .nav-logo {
+            color: #f0e68c;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            padding-bottom: 0.3rem;
+        }
+
+        .nav-miao-blue .nav-links a {
+            color: #e2e8f0;
+        }
+
+        .nav-miao-forest .nav-links a {
+            color: #e8e8d0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .nav-miao-blue .nav-links a::after {
+            background: #c9a962;
+        }
+
+        .nav-miao-forest .nav-links a::after {
+            background: #f0e68c;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .hero-section {
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-miao-blue {
+            background: linear-gradient(rgba(26, 54, 93, 0.9), rgba(13, 27, 42, 0.85)), 
+                        url('data:image/svg+xml,%3Csvg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M0 20L20 0L40 20L20 40Z" fill="%23c9a962" fill-opacity="0.1"/%3E%3C/svg%3E');
+        }
+
+        .hero-miao-forest {
+            background: linear-gradient(rgba(45, 80, 22, 0.9), rgba(26, 48, 10, 0.85)), 
+                        url('data:image/svg+xml,%3Csvg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M0 20L20 0L40 20L20 40Z" fill="%23f0e68c" fill-opacity="0.1"/%3E%3C/svg%3E');
+        }
+
+        .hero-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(201, 169, 98, 0.1) 10px,
+                rgba(201, 169, 98, 0.1) 12px
+            );
+        }
+
+        .hero-miao-forest .hero-pattern {
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(240, 230, 140, 0.1) 10px,
+                rgba(240, 230, 140, 0.1) 12px
+            );
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            position: relative;
+            padding-top: 2rem;
+        }
+
+        .hero-miao-blue .hero-title {
+            color: #c9a962;
+        }
+
+        .hero-miao-forest .hero-title {
+            color: #f0e68c;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .hero-miao-blue .hero-subtitle {
+            color: #e2e8f0;
+        }
+
+        .hero-miao-forest .hero-subtitle {
+            color: #e8e8d0;
+        }
+
+        .search-container {
+            max-width: 500px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 2.5rem 1rem 1.5rem;
+            border: 2px solid rgba(201, 169, 98, 0.3);
+            border-radius: 50px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-family: var(--font-family);
+        }
+
+        .hero-miao-forest .search-input {
+            border-color: rgba(240, 230, 140, 0.3);
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #c9a962;
+        }
+
+        .hero-miao-forest .search-input:focus {
+            border-color: #f0e68c;
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: 2px solid #c9a962;
+            color: #c9a962;
+            background: transparent;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .hero-miao-forest .search-btn {
+            border-color: #f0e68c;
+            color: #f0e68c;
+        }
+
+        .search-btn:hover {
+            background: #c9a962;
+            color: #1a365d;
+        }
+
+        .hero-miao-forest .search-btn:hover {
+            background: #f0e68c;
+            color: #2d5016;
+        }
+
+        .filters-section {
+            padding: 2rem;
+            background: #f8fafc;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-tab {
+            padding: 0.7rem 1.5rem;
+            border-radius: 25px;
+            border: 2px solid #1a365d;
+            background: transparent;
+            color: #1a365d;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: var(--font-family);
+            font-weight: 500;
+            position: relative;
+        }
+
+        .theme-forest .filter-tab {
+            border-color: #2d5016;
+            color: #2d5016;
+        }
+
+        .filter-tab::before,
+        .filter-tab::after {
+            content: '◆';
+            position: absolute;
+            font-size: 0.6rem;
+        }
+
+        .filter-tab::before {
+            left: 8px;
+        }
+
+        .filter-tab::after {
+            right: 8px;
+        }
+
+        .filter-tab:hover {
+            background: #1a365d;
+            color: #c9a962;
+        }
+
+        .theme-forest .filter-tab:hover {
+            background: #2d5016;
+            color: #f0e68c;
+        }
+
+        .filter-tab.active {
+            background: #1a365d;
+            color: #c9a962;
+        }
+
+        .theme-forest .filter-tab.active {
+            background: #2d5016;
+            color: #f0e68c;
+        }
+
+        .food-grid {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .food-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .food-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .card-pattern {
+            height: 40px;
+            background: repeating-linear-gradient(
+                45deg,
+                #1a365d,
+                #1a365d 10px,
+                #c9a962 10px,
+                #c9a962 12px
+            );
+        }
+
+        .theme-forest .card-pattern {
+            background: repeating-linear-gradient(
+                45deg,
+                #2d5016,
+                #2d5016 10px,
+                #f0e68c 10px,
+                #f0e68c 12px
+            );
+        }
+
+        .food-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .food-content {
+            padding: 1.5rem;
+        }
+
+        .food-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #1a365d;
+            margin-bottom: 0.5rem;
+        }
+
+        .theme-forest .food-title {
+            color: #2d5016;
+        }
+
+        .food-desc {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .food-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        .food-price {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #dc2626;
+        }
+
+        .food-price span {
+            font-size: 0.8rem;
+            font-weight: normal;
+            color: #999;
+        }
+
+        .food-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            color: #f59e0b;
+        }
+
+        .view-btn {
+            width: 100%;
+            margin-top: 1rem;
+            padding: 0.8rem;
+            border: 2px solid #1a365d;
+            background: #1a365d;
+            color: #c9a962;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: var(--font-family);
+            position: relative;
+            border-radius: 6px;
+        }
+
+        .theme-forest .view-btn {
+            border-color: #2d5016;
+            background: #2d5016;
+            color: #f0e68c;
+        }
+
+        .view-btn::before,
+        .view-btn::after {
+            content: '◆';
+            position: absolute;
+            font-size: 0.6rem;
+        }
+
+        .view-btn::before {
+            left: 15px;
+        }
+
+        .view-btn::after {
+            right: 15px;
+        }
+
+        .view-btn:hover {
+            background: transparent;
+            color: #1a365d;
+        }
+
+        .theme-forest .view-btn:hover {
+            background: transparent;
+            color: #2d5016;
+        }
+
+        .footer {
+            padding: 2rem;
+            text-align: center;
+            background: #1a365d;
+        }
+
+        .theme-forest .footer {
+            background: #2d5016;
+        }
+
+        .footer-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: #c9a962;
+        }
+
+        .theme-forest .footer-title {
+            color: #f0e68c;
+        }
+
+        .footer-desc {
+            opacity: 0.8;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+        }
+
+        .theme-forest .footer-desc {
+            color: #e8e8d0;
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .food-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="preview-container">
+        <div class="preview-header">
+            <h1>🎨 乌东村苗族风格 - 样式预览</h1>
+            <p>请选择您喜欢的配色方案</p>
+        </div>
+
+        <div class="scheme-tabs">
+            <button class="scheme-tab active" id="tab-blue">方案二：蓝金蜡染风</button>
+            <button class="scheme-tab" id="tab-forest">方案四：山林绿意风</button>
+        </div>
+
+        <div class="theme-section" id="preview-section">
+            <nav class="theme-nav nav-miao-blue" id="theme-nav">
+                <div class="nav-logo">乌东文旅</div>
+                <ul class="nav-links">
+                    <li><a href="#" class="active">首页</a></li>
+                    <li><a href="#">美食</a></li>
+                    <li><a href="#">景点</a></li>
+                    <li><a href="#">住宿</a></li>
+                </ul>
+            </nav>
+
+            <section class="hero-section hero-miao-blue" id="hero-section">
+                <div class="hero-pattern"></div>
+                <h1 class="hero-title">品味乌东 · 美食之旅</h1>
+                <p class="hero-subtitle">探索乌东村独特的苗族美食文化，感受淳朴自然的味蕾盛宴</p>
+                <div class="search-container">
+                    <input type="text" class="search-input" placeholder="搜索美食、餐厅...">
+                    <button class="search-btn">🔍</button>
+                </div>
+            </section>
+
+            <section class="filters-section" id="filters-section">
+                <div class="filter-tabs">
+                    <button class="filter-tab active">全部美食</button>
+                    <button class="filter-tab">传统菜肴</button>
+                    <button class="filter-tab">特色小吃</button>
+                    <button class="filter-tab">甜点饮品</button>
+                    <button class="filter-tab">餐厅推荐</button>
+                </div>
+            </section>
+
+            <section class="food-grid" id="food-grid">
+                <div class="food-card">
+                    <div class="card-pattern"></div>
+                    <img src="https://neeko-copilot.bytedance.net/api/text_to_image?prompt=Miao%20ethnic%20traditional%20sour%20soup%20with%20bamboo%20shoots%20and%20herbs%20in%20ceramic%20bowl&image_size=landscape_4_3" alt="苗家酸汤" class="food-image">
+                    <div class="food-content">
+                        <h3 class="food-title">苗家酸汤</h3>
+                        <p class="food-desc">苗族传统酸汤，以天然发酵酸汤为底，搭配鲜嫩竹笋和山野药材，酸辣开胃，回味无穷。</p>
+                        <div class="food-meta">
+                            <div class="food-price">¥58<span>/份</span></div>
+                            <div class="food-rating"><span>⭐</span><span>4.8</span></div>
+                        </div>
+                        <button class="view-btn">查看详情</button>
+                    </div>
+                </div>
+
+                <div class="food-card">
+                    <div class="card-pattern"></div>
+                    <img src="https://neeko-copilot.bytedance.net/api/text_to_image?prompt=Miao%20ethnic%20glutinous%20rice%20cake%20with%20red%20beans%20traditional%20dessert&image_size=landscape_4_3" alt="苗家糍粑" class="food-image">
+                    <div class="food-content">
+                        <h3 class="food-title">苗家糍粑</h3>
+                        <p class="food-desc">精选优质糯米，手工打制而成，软糯香甜，可蘸蜂蜜或黄豆粉食用，是苗家节庆必备美食。</p>
+                        <div class="food-meta">
+                            <div class="food-price">¥28<span>/份</span></div>
+                            <div class="food-rating"><span>⭐</span><span>4.6</span></div>
+                        </div>
+                        <button class="view-btn">查看详情</button>
+                    </div>
+                </div>
+
+                <div class="food-card">
+                    <div class="card-pattern"></div>
+                    <img src="https://neeko-copilot.bytedance.net/api/text_to_image?prompt=Miao%20ethnic%20braised%20pork%20with%20bamboo%20shoots%20traditional%20Chinese%20cuisine&image_size=landscape_4_3" alt="苗家腊肉" class="food-image">
+                    <div class="food-content">
+                        <h3 class="food-title">苗家腊肉</h3>
+                        <p class="food-desc">选用本地土猪肉，经传统工艺腌制烟熏，色泽红亮，肥而不腻，风味独特。</p>
+                        <div class="food-meta">
+                            <div class="food-price">¥68<span>/份</span></div>
+                            <div class="food-rating"><span>⭐</span><span>4.9</span></div>
+                        </div>
+                        <button class="view-btn">查看详情</button>
+                    </div>
+                </div>
+
+                <div class="food-card">
+                    <div class="card-pattern"></div>
+                    <img src="https://neeko-copilot.bytedance.net/api/text_to_image?prompt=Miao%20ethnic%20rice%20wine%20in%20ceramic%20jar%20traditional%20fermented%20beverage&image_size=landscape_4_3" alt="苗家米酒" class="food-image">
+                    <div class="food-content">
+                        <h3 class="food-title">苗家米酒</h3>
+                        <p class="food-desc">采用山泉水和优质糯米发酵而成，酒香浓郁，口感醇厚，是苗家待客佳品。</p>
+                        <div class="food-meta">
+                            <div class="food-price">¥48<span>/壶</span></div>
+                            <div class="food-rating"><span>⭐</span><span>4.7</span></div>
+                        </div>
+                        <button class="view-btn">查看详情</button>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="footer" id="footer">
+                <h3 class="footer-title">乌东文旅美食平台</h3>
+                <p class="footer-desc">探索乌东村的苗族美食文化，感受独特的饮食魅力</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        const themes = {
+            blue: {
+                name: '蓝金蜡染风',
+                navClass: 'nav-miao-blue',
+                heroClass: 'hero-miao-blue',
+                themeClass: ''
+            },
+            forest: {
+                name: '山林绿意风',
+                navClass: 'nav-miao-forest',
+                heroClass: 'hero-miao-forest',
+                themeClass: 'theme-forest'
+            }
+        };
+
+        document.getElementById('tab-blue').addEventListener('click', () => {
+            applyTheme('blue');
+        });
+
+        document.getElementById('tab-forest').addEventListener('click', () => {
+            applyTheme('forest');
+        });
+
+        function applyTheme(themeName) {
+            document.querySelectorAll('.scheme-tab').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(`tab-${themeName}`).classList.add('active');
+            
+            const theme = themes[themeName];
+            
+            document.getElementById('theme-nav').className = `theme-nav ${theme.navClass}`;
+            document.getElementById('hero-section').className = `hero-section ${theme.heroClass}`;
+            document.getElementById('preview-section').className = `theme-section ${theme.themeClass}`;
+            document.getElementById('filters-section').className = `filters-section ${theme.themeClass}`;
+            document.getElementById('footer').className = `footer ${theme.themeClass}`;
+        }
+    </script>
+</body>
+</html>

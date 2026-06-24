@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>乌东文旅平台 - 餐饮美食模块</title>
+    <style>
+        :root {
+            --primary-color: #8B4513;
+            --secondary-color: #D2691E;
+            --accent-color: #CD853F;
+            --warm-brown: #A0522D;
+            --cream: #FFF8DC;
+            --beige: #F5DEB3;
+            --dark-brown: #5D4037;
+            --gold: #DAA520;
+            --terracotta: #E2725B;
+            --forest: #228B22;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'SimHei', sans-serif;
+            background: linear-gradient(135deg, var(--cream) 0%, var(--beige) 100%);
+            min-height: 100vh;
+        }
+
+        .nav-header {
+            background: linear-gradient(180deg, var(--primary-color) 0%, var(--dark-brown) 100%);
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 15px rgba(93, 64, 55, 0.4);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--secondary-color) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 3px 10px rgba(218, 165, 32, 0.5);
+        }
+
+        .logo-text {
+            color: var(--cream);
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--cream);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 248, 220, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .nav-links a.active {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--secondary-color) 100%);
+            box-shadow: 0 3px 10px rgba(218, 165, 32, 0.4);
+        }
+
+        .banner-section {
+            background: linear-gradient(rgba(139, 69, 19, 0.9), rgba(93, 64, 55, 0.8)), 
+                        url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M30 5L35 20H50L37 32L42 50L30 40L18 50L23 32L10 20H25L30 5Z" fill="%23DAA520" fill-opacity="0.1"/%3E%3C/svg%3E');
+            padding: 4rem 2rem;
+            text-align: center;
+            color: var(--cream);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .banner-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--gold), var(--terracotta), var(--gold));
+        }
+
+        .banner-title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.4);
+            position: relative;
+        }
+
+        .banner-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+
+        .banner-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .search-container {
+            max-width: 500px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 2.5rem 1rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(218, 165, 32, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+            border: none;
+            color: var(--cream);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 4px 15px rgba(210, 105, 30, 0.5);
+        }
+
+        .filters-section {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-tab {
+            padding: 0.7rem 1.5rem;
+            border-radius: 25px;
+            border: 2px solid var(--warm-brown);
+            background: transparent;
+            color: var(--dark-brown);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .filter-tab:hover {
+            background: var(--warm-brown);
+            color: var(--cream);
+            transform: translateY(-2px);
+        }
+
+        .filter-tab.active {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+            border-color: var(--secondary-color);
+            color: var(--cream);
+            box-shadow: 0 4px 12px rgba(139, 69, 19, 0.4);
+        }
+
+        .food-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            padding-bottom: 4rem;
+        }
+
+        .food-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(93, 64, 55, 0.15);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .food-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(93, 64, 55, 0.25);
+        }
+
+        .food-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--terracotta), var(--gold), var(--forest));
+        }
+
+        .food-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .food-card:hover .food-image {
+            transform: scale(1.05);
+        }
+
+        .food-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--secondary-color) 100%);
+            color: var(--cream);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .food-content {
+            padding: 1.5rem;
+        }
+
+        .food-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--dark-brown);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .food-title::before {
+            content: '';
+            width: 4px;
+            height: 18px;
+            background: linear-gradient(180deg, var(--terracotta) 0%, var(--gold) 100%);
+            border-radius: 2px;
+        }
+
+        .food-desc {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .food-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid var(--beige);
+        }
+
+        .food-price {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--terracotta);
+        }
+
+        .food-price span {
+            font-size: 0.8rem;
+            font-weight: normal;
+            color: #999;
+        }
+
+        .food-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            color: var(--gold);
+        }
+
+        .view-btn {
+            width: 100%;
+            margin-top: 1rem;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+            color: var(--cream);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .view-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(139, 69, 19, 0.4);
+        }
+
+        .view-btn:active {
+            transform: translateY(0);
+        }
+
+        .footer {
+            background: linear-gradient(180deg, var(--dark-brown) 0%, var(--primary-color) 100%);
+            padding: 2rem;
+            text-align: center;
+            color: var(--cream);
+            margin-top: 2rem;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .footer-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--gold);
+        }
+
+        .footer-desc {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 15px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--dark-brown) 100%);
+            padding: 1.5rem;
+            color: var(--cream);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 15px 15px 0 0;
+        }
+
+        .modal-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .modal-close {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: var(--cream);
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-food-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-food-info {
+            margin-bottom: 1rem;
+        }
+
+        .modal-food-info h3 {
+            color: var(--dark-brown);
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-food-info p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .modal-food-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: var(--cream);
+            border-radius: 10px;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .detail-label {
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        .detail-value {
+            font-weight: 600;
+            color: var(--dark-brown);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-secondary {
+            flex: 1;
+            padding: 0.8rem;
+            border: 2px solid var(--warm-brown);
+            border-radius: 8px;
+            background: transparent;
+            color: var(--warm-brown);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: var(--warm-brown);
+            color: var(--cream);
+        }
+
+        .btn-primary {
+            flex: 2;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+            color: var(--cream);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 4px 12px rgba(139, 69, 19, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .scroll-top-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+            border: none;
+            border-radius: 50%;
+            color: var(--cream);
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(139, 69, 19, 0.4);
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .scroll-top-btn.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-top-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(139, 69, 19, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .banner-title {
+                font-size: 2rem;
+            }
+            
+            .food-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="nav-header">
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon">🍽️</div>
+                <span class="logo-text">乌东文旅美食</span>
+            </div>
+            <nav class="nav-links">
+                <a href="#" class="active">首页</a>
+                <a href="#">特色美食</a>
+                <a href="#">餐厅推荐</a>
+                <a href="#">美食攻略</a>
+                <a href="#">联系我们</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="banner-section">
+        <h1 class="banner-title">品味乌东 · 美食之旅</h1>
+        <p class="banner-subtitle">探索乌克兰东部独特的美食文化，感受异域风情的味蕾盛宴</p>
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="搜索美食、餐厅...">
+            <button class="search-btn">🔍</button>
+        </div>
+    </section>
+
+    <section class="filters-section">
+        <div class="filter-tabs">
+            <button class="filter-tab active">全部美食</button>
+            <button class="filter-tab">传统菜肴</button>
+            <button class="filter-tab">特色小吃</button>
+            <button class="filter-tab">甜点饮品</button>
+            <button class="filter-tab">餐厅推荐</button>
+            <button class="filter-tab">美食节</button>
+        </div>
+    </section>
+
+    <section class="food-grid" id="foodGrid">
+    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <h3 class="footer-title">乌东文旅美食平台</h3>
+            <p class="footer-desc">探索乌克兰东部的美食文化，感受独特的饮食魅力</p>
+        </div>
+    </footer>
+
+    <button class="scroll-top-btn" id="scrollTopBtn">⬆️</button>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">美食详情</h2>
+                <button class="modal-close" id="modalClose">×</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const foodsData = [
+            {
+                id: 1,
+                name: "红菜汤",
+                description: "乌克兰传统红菜汤，以甜菜为主料，搭配牛肉、土豆、胡萝卜等食材熬制而成，色泽红润，酸甜可口。",
+                price: 48,
+                rating: 4.8,
+                image: "https://neeko-copilot.bytedance.net/api/text_to_image?prompt=Ukrainian%20borscht%20red%20beet%20soup%20in%20traditional%20ceramic%20bowl%20with%20sour%20cream%20on%20top&image_size=landscape_4_3",
+                badge: "传统美食",
+                category: "传统菜肴",
+                cookTime: "45分钟",
+                servings: "2-3人份"
+            },
+            {
+                id: 2,
+                name: "萨洛",
+                description: "乌克兰传统腌肥肉，通常搭配黑面包和洋葱食用，是当地最具特色的美食之一。",
+                price: 38,
+                rating: 4.5,
+                image: "https://neeko-copilot.bytedance.net/api/text_to_image?prompt=Ukrainian%20salo%20cured%20pork%20fat%20slices%20with%20black%20bread%20and%20onion%20traditional%20appetizer&image_size=landscape_4_3",
+                badge: "特色小吃",
+                category: "特色小吃",
+                cookTime: "即食",
+                servings: "1人份"
+            },
+            {
+                id: 3,
+                name: "varenyky",
+                description: "乌克兰传统饺子，馅料丰富多样，有土豆、奶酪、肉类等多种口味，口感软糯，味道鲜美。",
+                price: 35,
+                rating: 4.7,
+                image: "https://neeko-copilot.bytedance.net/api/text_to_image?prompt=Ukrainian%20varenyky%20dumplings%20with%20potato%20filling%20topped%20with%20butter%20and%20sour%20cream&image_size=landscape_4_3",
+                badge: "必尝",
+                category: "传统菜肴",
+                cookTime: "20分钟",
+                servings: "2人份"
+            },
+            {
+                id: 4,
+                name: "蜂蜜酒",
+                description: "用蜂蜜发酵制成的传统饮品，口感香甜醇厚，酒精度适中，是乌东地区的特色饮品。",
+                price: 58,
+                rating: 4.6,
+                image: "https://neeko-copilot.bytedance.net/api/text_to_image?prompt=Traditional%20Ukrainian%20mead%20honey%20wine%20in%20ceramic%20jug%20with%20honeycomb%20and%20berries&image_size=landscape_4_3",
+                badge: "特色饮品",
+                category: "甜点饮品",
+                cookTime: "发酵30天",
+                servings: "500ml"
+            },
+            {
+                id: 5,
+                name: "基辅鸡肉卷",
+                description: "经典的乌克兰菜肴，鸡胸肉包裹黄油和香草，炸至金黄酥脆，外酥里嫩。",
+                price: 68,
+                rating: 4.9,
+                image: "https://neeko-copilot.bytedance.net/api/text_to_image?prompt=Kyiv%20chicken%20cutlet%20breaded%20chicken%20roll%20with%20herbs%20on%20white%20plate%20Ukrainian%20cuisine&image_size=landscape_4_3",
+                badge: "招牌菜",
+                category: "传统菜肴",
+                cookTime: "30分钟",
+                servings: "1人份"
+            },
+            {
+                id: 6,
+                name: "奶酪蛋糕",
+                description: "乌克兰传统奶酪甜点，口感细腻，奶香浓郁，搭配果酱食用更加美味。",
+                price: 28,
+                rating: 4.4,
+                image: "https://neeko-copilot.bytedance.net/api/text_to_image?prompt=Ukrainian%20syrnyk%20cottage%20cheese%20cake%20with%20strawberry%20jam%20traditional%20dessert&image_size=landscape_4_3",
+                badge: "甜点",
+                category: "甜点饮品",
+                cookTime: "25分钟",
+                servings: "1人份"
+            }
+        ];
+
+        function renderFoodCards(foods) {
+            const grid = document.getElementById('foodGrid');
+            grid.innerHTML = foods.map(food => `
+                <div class="food-card" onclick="openModal(${food.id})">
+                    <div class="food-badge">${food.badge}</div>
+                    <img src="${food.image}" alt="${food.name}" class="food-image">
+                    <div class="food-content">
+                        <h3 class="food-title">${food.name}</h3>
+                        <p class="food-desc">${food.description}</p>
+                        <div class="food-meta">
+                            <div class="food-price">¥${food.price}<span>/份</span></div>
+                            <div class="food-rating">
+                                <span>⭐</span>
+                                <span>${food.rating}</span>
+                            </div>
+                        </div>
+                        <button class="view-btn">查看详情 →</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openModal(foodId) {
+            const food = foodsData.find(f => f.id === foodId);
+            if (!food) return;
+
+            document.getElementById('modalTitle').textContent = food.name;
+            document.getElementById('modalBody').innerHTML = `
+                <img src="${food.image}" alt="${food.name}" class="modal-food-image">
+                <div class="modal-food-info">
+                    <h3>菜品介绍</h3>
+                    <p>${food.description}</p>
+                </div>
+                <div class="modal-food-details">
+                    <div class="detail-item">
+                        <span class="detail-label">价格</span>
+                        <span class="detail-value">¥${food.price}/份</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">评分</span>
+                        <span class="detail-value">⭐ ${food.rating}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">烹饪时间</span>
+                        <span class="detail-value">${food.cookTime}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">份量</span>
+                        <span class="detail-value">${food.servings}</span>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn-secondary" onclick="closeModal()">关闭</button>
+                    <button class="btn-primary">立即预订</button>
+                </div>
+            `;
+            document.getElementById('modalOverlay').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('show');
+        }
+
+        document.getElementById('modalClose').addEventListener('click', closeModal);
+        document.getElementById('modalOverlay').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('modalOverlay')) {
+                closeModal();
+            }
+        });
+
+        const scrollTopBtn = document.getElementById('scrollTopBtn');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                scrollTopBtn.classList.add('show');
+            } else {
+                scrollTopBtn.classList.remove('show');
+            }
+        });
+
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        const filterTabs = document.querySelectorAll('.filter-tab');
+        filterTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                filterTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                const category = tab.textContent;
+                if (category === '全部美食') {
+                    renderFoodCards(foodsData);
+                } else {
+                    const filtered = foodsData.filter(f => f.category === category);
+                    renderFoodCards(filtered);
+                }
+            });
+        });
+
+        renderFoodCards(foodsData);
+    </script>
+</body>
+</html>
